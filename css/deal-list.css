@@ -1,0 +1,45 @@
+
+.header-bg {
+	width: 100%;
+}
+.header-bg img {
+	width: 100%;
+}
+
+.user-login-logout-wrapper {
+	display: flex;
+	justify-content: end;
+}
+
+.user-login-logout {
+	position: relative;
+	border-radius: 15px;
+	cursor: pointer;
+	padding: 5px;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin: auto;
+	margin-right: 0;
+}
+
+
+.user-logout {
+	display: none;
+	position: absolute;
+	left:10%;
+	top: 100%;
+	width: 80%;
+	box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.user-login-logout:hover .user-logout {
+	display: block;
+}
+
+.signature {
+	display:flex;
+}
+
+.signature img {
+	margin: auto;
+}
