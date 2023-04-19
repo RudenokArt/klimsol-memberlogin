@@ -1,7 +1,6 @@
 
 
 <div class="deal-list-page">
-  <link rel="stylesheet" href="css/deal-list.css">
 
   <div class="header-bg">
     <img src="img/deal_list-header_bg.jpg" alt="">

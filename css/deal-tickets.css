@@ -20,3 +20,7 @@
 	margin: auto;
 	max-width: 576px;
 }
+
+#addTicketForm {
+	min-width: 576px;
+}

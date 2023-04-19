@@ -148,6 +148,8 @@ $data = json_encode($data, true);
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/deal-list.css">
+<link rel="stylesheet" href="css/deal-tickets.css">
 
 <script type="text/x-template" id="user-login">
   <div class="login-page login-page-logo">
@@ -384,8 +386,15 @@ $data = json_encode($data, true);
   @user-title="userTitle" @disk-files-data="onDiskFilesData"
   :login="login" :deal="deal['ID']" :settings="settings" :users="users" :member="member" :diskdata="diskdata" :bxmember="member"
   />
+
+<deal-tickets
+v-bind:login="login"
+v-bind:deal="deal"
+v-bind:settings="settings"
+/>
 </div>
 </div>
+
 </div>
 </div>
 </script>
@@ -504,14 +513,6 @@ $data = json_encode($data, true);
     >
   </div>
 </div>
-<deal-tickets
-v-bind:login="login"
-v-bind:deal="deal"
-v-bind:settings="settings"
-v-bind:users="users"
-v-bind:member="member"
-v-bind:bxmember="member"
-/>
 </div>
 </script>
 
