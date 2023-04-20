@@ -37,23 +37,74 @@
       Neues Ticket hinzufügen
     </button>
     <hr>
-    <div v-for="(item, index) in ticketsLIst" class="row">
-      <div class="col-2">
-        {{item.ID}}
+    <div v-for="(item, index) in ticketsLIst" class="row pt-1 pb-1 service-ticket-item" 
+    v-on:click="itemTicketsPopupVisible=true; setItemTicketsPopupContent(item)">
+    <div class="col-2">
+      {{item.ID}}
+    </div>
+    <div class="col-6">
+      {{item.TITLE}}
+    </div>
+    <div class="col-4">
+      {{item.DATE_CREATE.slice(0,10)}}
+    </div>
+
+    <div class="col-12">
+
+      <div class="progress">
+        <div v-if="item.STAGE_ID=='C7:NEW'"
+        class="progress-bar bg-secondary" style="width: 20%"
+        role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+     
+        <div v-if="item.STAGE_ID=='C7:PREPAYMENT_INVOICE'"
+        class="progress-bar bg-info" style="width: 40%"
+        role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+    
+        <div v-if="item.STAGE_ID=='C7:EXECUTING'"
+        class="progress-bar bg-primary" style="width: 60%"
+        role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+      
+        <div v-if="item.STAGE_ID=='C7:FINAL_INVOICE'"
+        class="progress-bar bg-warning" style="width: 80%"
+        role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+      
+        <div v-if="item.STAGE_ID=='C7:WON'"
+        class="progress-bar bg-success" style="width: 100%"
+        role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+      
+        <div v-if="item.STAGE_ID=='C7:LOSE'"
+        class="progress-bar bg-danger" style="width: 100%"
+        role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+      
+        <div v-if="item.STAGE_ID=='C7:APOLOGY'"
+        class="progress-bar bg-danger" style="width: 100%"
+        role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
-      <div class="col-5">
-        {{item.TITLE}}
-      </div>
-      <div class="col-3">
-        {{item.DATE_CREATE.slice(0,10)}}
-      </div>
-      <div class="col-2">
-        {{item.STAGE_ID}}
-      </div>
+
     </div>
   </div>
-
 </div>
+</div>
+</div>
+
+<div class="popup-wrapper" v-if="itemTicketsPopupVisible">
+  <div class="popup-inner bg-light">
+    <div class="text-end h3 p-1">
+      <a v-on:click.prevent="itemTicketsPopupVisible=false" href="#" class="btn btn-outline-danger">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </a>
+    </div>
+    <div class="p-3">
+      <div class="row justify-content-around">
+        <div class="col-4">{{itemTicketsPopupContent.id}}</div>
+        <div class="col-4">{{itemTicketsPopupContent.date}}</div>
+        <div class="col-4">{{itemTicketsPopupContent.stage}}</div>
+        <div class="col-12">{{itemTicketsPopupContent.title}}</div>   
+      </div>
+      <hr>
+      <div v-html="itemTicketsPopupContent.comments"></div>
+    </div>
+  </div>
 </div>
 
 <div class="popup-wrapper" v-if="addTicketPopupVisible">
@@ -66,32 +117,32 @@
     <form v-on:submit.prevent="addTicketFormSubmit" action="" method="post" id="addTicketForm" class="p-3">
       <div class="pt-2 pb-2">
         Service Grund:
-      <select v-model="reason" class="form-select" required>
-        <option></option>
-        <option>Garantie Fall</option>
-        <option>Reclamation</option>
-      </select>
+        <select v-model="reason" class="form-select" required>
+          <option></option>
+          <option>Garantie Fall</option>
+          <option>Reclamation</option>
+        </select>
       </div>
       <div class="pt-2 pb-2">
         Priorität: 
-      <select v-model="priority" class="form-select" required>
-        <option></option>
-        <option>Kritishe störung</option>
-        <option>Störung</option>
-        <option>unerhebliche Störung</option>
-      </select>
+        <select v-model="priority" class="form-select" required>
+          <option></option>
+          <option>Kritishe störung</option>
+          <option>Störung</option>
+          <option>unerhebliche Störung</option>
+        </select>
       </div>
       <div class="pt-2 pb-2">
         Bemerkung:
-      <textarea v-model="remark" class="form-control" required></textarea>
+        <textarea v-model="remark" class="form-control" required></textarea>
       </div>
       <div class="pt-2 pb-2">
-         <button class="btn-outline-info btn w-100">
+       <button class="btn-outline-info btn w-100">
         <i class="fa fa-envelope-o" aria-hidden="true"></i>
       </button>
-      </div>
-    </form>
-  </div>
+    </div>
+  </form>
+</div>
 </div>
 
 
@@ -111,16 +162,11 @@
     </div>   
   </div>
 </div>
-<hr>
-login: {{login}}
-<br>
-deal: {{deal}}
-<br>
-settings: {{settings}}
-<br>
-users: {{users}}
-<br>
-member: {{member}}
-<br>
-bxmember: {{bxmember}}
+
+
+<div v-if="preloaderVisible" class="preloader-wrapper">
+  <div class="preloader-inner">
+    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+  </div>
+</div>
 </div>

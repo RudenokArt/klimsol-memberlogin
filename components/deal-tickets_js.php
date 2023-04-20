@@ -1,7 +1,7 @@
 <script>
 
  Vue.component('deal-tickets', {
-  props: ['login', 'deal', 'settings', 'users', 'member', 'bxmember'],
+  props: ['login', 'deal', 'settings',],
   data: function () {
     return {
       ticketsFAQLIst: [],
@@ -15,27 +15,43 @@
       priority: '',
       remark: '',
       ticketsLIst: [],
+      itemTicketsPopupVisible: false,
+      preloaderVisible: false,
+      itemTicketsPopupContent: {},
     };
   },
   template: '#deal-tickets',
   methods: {
 
+    setItemTicketsPopupContent: function (item) {
+      this.itemTicketsPopupContent = {
+        id: item.ID,
+        title: item.TITLE,
+        date: item.DATE_CREATE.slice(0,10),
+        stage: item.STAGE_ID,
+        comments: item.COMMENTS,
+      };
+    },
+
     getTicketsList: async function () {
       console.clear();
+      this.preloaderVisible = true;
       var queryString = new URLSearchParams();
       queryString.set('filter[ORIGIN_ID]', this.deal.ID);
       var url = this.settings.apiUrl + 'crm.deal.list.json?' + queryString.toString();
       var response = await fetch(url);
       var content = await response.json();
+      this.preloaderVisible = false;
       return content.result;
     },
 
     addTicketFormSubmit: async function () {
       console.clear();
+      this.preloaderVisible = true;
       var comments = '<b>Service Grund:</b> ' + this.reason + 
       '<br><b>Priorität: </b>' + this.priority + 
-      '<br><b>Bemerkung:</b>' + this.remark + 
-      '<br><b>Elternvertrag:</b> https://crm.klimsol.de/crm/deal/details/5111/' + this.deal.ID;
+      '<br><b>Bemerkung: </b>' + this.remark;
+      // +  '<br><b>Elternvertrag:</b> https://crm.klimsol.de/crm/deal/details/' + this.deal.ID + '/';
       var queryString = new URLSearchParams();
       queryString.set('fields[ORIGIN_ID]', this.deal.ID);
       queryString.set('fields[COMMENTS]', comments);
@@ -47,6 +63,7 @@
       var content = await response.json();
       this.ticketsLIst = await this.getTicketsList();
       this.addTicketPopupVisible = false;
+      this.preloaderVisible = false;
       console.log(content);
     },
 

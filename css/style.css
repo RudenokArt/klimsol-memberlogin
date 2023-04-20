@@ -75,7 +75,7 @@ body {
 .login-page-logo {
     overflow-y: auto;
     flex-direction: column;
-    background-image: url("background.jpg");
+    background-image: url("img/background.jpg");
     background-repeat: round round;
     background-position: center;
     background-size: 100% 100%;
@@ -754,7 +754,7 @@ body {
     width: 20px;
     height: 20px;
     margin-left: 12px;
-    background-image: url("down-arrow.png");
+    background-image: url("img/down-arrow.png");
     background-repeat: round round;
     pointer-events: none;
 }

@@ -24,3 +24,27 @@
 #addTicketForm {
 	min-width: 576px;
 }
+
+.service-ticket-item {
+	cursor:pointer;
+}
+
+.service-ticket-item:hover {
+	color: red;
+}
+
+.preloader-wrapper {
+	display:flex;
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.2);
+}
+
+.preloader-inner {
+	margin: auto;
+	font-size: 24px;
+	color: grey;
+}

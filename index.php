@@ -58,7 +58,7 @@ $data = [
     'topLinks' => [
       'topLogoLink' => [
         'href' => 'https://klimsol.de',
-        'src' => 'logo.png',
+        'src' => 'img/logo.png',
         'width' => '140',
         'height' => '45',
       ],
@@ -155,7 +155,7 @@ $data = json_encode($data, true);
   <div class="login-page login-page-logo">
     <top-links :settings="settings['topLinks']"/>
     <div class="logo">
-      <img src="logo.png" width="400" height="128" alt="logo"/>
+      <img src="img/logo.png" width="400" height="128" alt="logo"/>
     </div>
     <div class="auth-block auth-block-bg">
       <div class="auth-block-item">
