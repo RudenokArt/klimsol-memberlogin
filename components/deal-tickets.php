@@ -95,10 +95,9 @@
       </a>
     </div>
     <div class="p-3">
-      <div class="row justify-content-around">
-        <div class="col-4">{{itemTicketsPopupContent.id}}</div>
-        <div class="col-4">{{itemTicketsPopupContent.date}}</div>
-        <div class="col-4">{{itemTicketsPopupContent.stage}}</div>
+      <div class="row justify-content-between">
+        <div class="col-6">{{itemTicketsPopupContent.id}}</div>
+        <div class="col-6">{{itemTicketsPopupContent.date}}</div>
         <div class="col-12">{{itemTicketsPopupContent.title}}</div>   
       </div>
       <hr>
@@ -145,7 +144,6 @@
 </div>
 </div>
 
-
 <div class="popup-wrapper" v-if="popupVisible">
   <div class="popup-inner bg-light">
     <div class="text-end h3 p-1">
@@ -163,10 +161,10 @@
   </div>
 </div>
 
-
 <div v-if="preloaderVisible" class="preloader-wrapper">
   <div class="preloader-inner">
     <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
   </div>
 </div>
+
 </div>

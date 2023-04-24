@@ -58,6 +58,7 @@
       queryString.set('fields[ASSIGNED_BY_ID]', this.deal.ASSIGNED_BY_ID);
       queryString.set('fields[CATEGORY_ID]', 7);
       queryString.set('fields[TITLE]', 'Ticket: ' + this.reason);
+      queryString.set('fields[UF_CRM_1682084350]', this.deal.ID);
       var url = this.settings.apiUrl + 'crm.deal.add.json?' + queryString.toString();
       var response = await fetch(url);
       var content = await response.json();
@@ -65,6 +66,12 @@
       this.addTicketPopupVisible = false;
       this.preloaderVisible = false;
       console.log(content);
+    },
+
+    getDealByID: async function (deal_id) {
+      var url = this.settings.apiUrl + 'crm.deal.get.json?id=' + deal_id;
+      var response = await fetch(url);
+      return await response.json();
     },
 
     unixTimeConverter: function (unixDate) {
@@ -99,7 +106,7 @@
   mounted: async function () {
     this.ticketsFAQLIst = await this.getTicketsFAQList();
     this.ticketsLIst = await this.getTicketsList();
-
+    this.test = await this.getDealByID(5148);
   }
 
 }); 
