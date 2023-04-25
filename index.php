@@ -206,197 +206,7 @@ $data = json_encode($data, true);
 </script>
 
 <script type="text/x-template" id="deal-page">
-  <div class="deal-page">
-    <div class="page-top page-top-deal">
-      <div class="top-controls">
-        <span class="exit-btn" @click="back()">{{settings.buttons['back']}}</span>
-      </div>
-      <div class="login-block">
-        <span class="user-title">{{login}}</span>
-        <span class="spacing"></span>
-        <span class="exit-btn" @click="logOut()">{{settings.buttons['logout']}}</span>
-      </div>
-    </div>
-    <div class="content">
-      <span class="deal-page-title">{{settings['dealPageTitle']}}:</span>
-      <slot v-if="statuslist && statuses && deal['STAGE_ID']">
-        <status-bar
-        :statuslist="statuslist" :statusnames="statuses"
-        :dealstatus="deal['STAGE_ID']" :type="'deal'" :finaltext="settings['finalizeStatusTitle']"
-        />
-      </slot>
-      <div class="deal-page-block">
-        <div class="deal-page-fields">
-          <slot v-if="Object.keys(card).length > 0">
-            <slot v-for="cardV in card">
-              <div
-              :id="'section-'+cardV['sectName']"
-              class="deal-section"
-              >
-              <div class="section-title">{{cardV['sectTitle']}}</div>
-              <div class="section-fields">
-                <slot v-for="(fVal,fKey) in cardV['sectFields']">
-                  <slot v-if="fKey in deal && fKey in dealfieldsinfo">
-
-                    <slot
-                    v-if="(deal[fKey] || deal[fKey].length > 0) ||
-                    (cardV['sectAlwaysShowFields'].indexOf(fKey) !== -1 || settings['arFileUploadFields'].indexOf(fKey) !== -1)"
-                    >
-                    <div class="section-field-item">
-                      <div class="section-field-title">
-                        <slot v-if="fVal['formLabel']">{{fVal['formLabel']}}</slot>
-                        <slot v-else-if="fVal['filterLabel']">{{fVal['filterLabel']}}</slot>
-                        <slot v-else-if="fVal['listLabel']">{{fVal['listLabel']}}</slot>
-                        <slot v-else-if="fVal['title']">{{fVal['title']}}</slot>
-                        <slot v-else>{{fKey}}</slot>
-                      </div>
-                      <div class="section-field-item-container">
-                        <slot v-if="!deal[fKey]">
-                          <span class="section-item-muted">{{settings['emptyDataMsg']}}</span>
-                        </slot>
-                        <slot v-else-if="deal[fKey].length === 0">
-                          <span class="section-item-muted">{{settings['emptyDataMsg']}}</span>
-                        </slot>
-                        <slot v-else>
-                          <slot v-if="dealfieldsinfo[fKey]['type'] === 'crm_status'">
-                            <slot v-if="statuses[deal[fKey]]">{{statuses[deal[fKey]]}}</slot>
-                            <slot v-else>{{deal[fKey]}}</slot>
-                          </slot>
-                          <slot v-else-if="dealfieldsinfo[fKey]['type'] === 'file'">
-                            <slot v-if="dealfieldsinfo[fKey]['isMultiple']">
-                              <slot v-if="deal[fKey].length > 0">
-                                <slot v-for="fileId in deal[fKey]">
-                                  <slot v-if="files[fileId]">
-                                    <a
-                                    target="_blank"
-                                    :href="files[fileId]['SRC']"
-                                    class="item-link"
-                                    >
-                                    <slot v-if="files[fileId]['CONTENT_TYPE'] === 'image/png' || files[fileId]['CONTENT_TYPE'] === 'image/jpeg'">
-                                      <img
-                                      class="item-image"
-                                      :src="files[fileId]['SRC']"
-                                      :alt="files[fileId]['FILE_NAME']"
-                                      />
-                                    </slot>
-                                    <slot v-else>{{files[fileId]['FILE_NAME']}}</slot>
-                                  </a>
-                                </slot>
-                              </slot>
-                            </slot>
-                          </slot>
-                          <slot v-else>
-                            <slot v-if="files[deal[fKey]]">
-                              <a
-                              target="_blank"
-                              :href="files[deal[fKey]]['SRC']"
-                              class="item-link"
-                              >{{files[deal[fKey]]['FILE_NAME']}}</a>
-                            </slot>
-                          </slot>
-                        </slot>
-                        <slot v-else>
-                          <slot v-if="dealfieldsinfo[fKey]['isMultiple']">
-                            <slot v-for="v in deal[fKey]">
-                              {{v}}<br>
-                            </slot>
-                          </slot>
-                          <slot v-else>{{deal[fKey]}}</slot>
-                        </slot>
-                      </slot>
-                    </div>
-                    <slot v-if="settings['arFileUploadFields'].indexOf(fKey) !== -1">
-                      <file-upload
-                      :settings="settings" :field="fKey" :dealfieldsinfo="dealfieldsinfo"
-                      :deal="deal['ID']" @deal-update="onDealUpdate"
-                      />
-                    </slot>
-                  </div>
-                </slot>
-
-              </slot>
-            </slot>
-          </div>
-        </div>
-      </slot>
-    </slot>
-    <slot v-else>
-      <slot v-for="(fVal,fKey) in showfieldsdefault">
-        <slot v-if="fKey in deal && fKey in dealfieldsinfo">
-
-          <div class="field-item">
-            <div class="field-title">{{fVal}}:</div>
-            <div class="field-item-container">
-              <slot v-if="!deal[fKey]">
-                <span class="item-muted">{{settings['emptyDataMsg']}}</span>
-              </slot>
-              <slot v-else-if="deal[fKey].length === 0">
-                <span class="item-muted">{{settings['emptyDataMsg']}}</span>
-              </slot>
-              <slot v-else>
-                <slot v-if="dealfieldsinfo[fKey]['type'] === 'crm_status'">
-                  <slot v-if="statuses[deal[fKey]]">{{statuses[deal[fKey]]}}</slot>
-                  <slot v-else>{{deal[fKey]}}</slot>
-                </slot>
-                <slot v-else-if="dealfieldsinfo[fKey]['type'] === 'file'">
-                  <slot v-if="dealfieldsinfo[fKey]['isMultiple']">
-                    <slot v-if="deal[fKey].length > 0">
-                      <slot v-for="fileId in deal[fKey]">
-                        <slot v-if="files[fileId]">
-                          <a
-                          target="_blank"
-                          :href="files[fileId]['SRC']"
-                          class="item-link"
-                          >
-                          <slot v-if="files[fileId]['CONTENT_TYPE'] === 'image/png'">
-                            <img
-                            class="item-image"
-                            :src="files[fileId]['SRC']"
-                            :alt="files[fileId]['FILE_NAME']"
-                            />
-                          </slot>
-                          <slot v-else>{{files[fileId]['FILE_NAME']}}</slot>
-                        </a>
-                      </slot>
-                    </slot>
-                  </slot>
-                </slot>
-                <slot v-else>
-                  <slot v-if="files[deal[fKey]]">
-                    <a
-                    target="_blank"
-                    :href="files[deal[fKey]]['SRC']"
-                    class="item-link"
-                    >{{files[deal[fKey]]['FILE_NAME']}}</a>
-                  </slot>
-                </slot>
-              </slot>
-              <slot v-else>{{deal[fKey]}}</slot>
-            </slot>
-          </div>
-        </div>
-
-      </slot>
-    </slot>
-  </slot>
-</div>
-
-<div class="deal-page-side">
-  <deal-chat
-  @user-title="userTitle" @disk-files-data="onDiskFilesData"
-  :login="login" :deal="deal['ID']" :settings="settings" :users="users" :member="member" :diskdata="diskdata" :bxmember="member"
-  />
-
-<deal-tickets
-v-bind:login="login"
-v-bind:deal="deal"
-v-bind:settings="settings"
-/>
-</div>
-</div>
-
-</div>
-</div>
+ <?php include_once 'components/deal-page.php'; ?>
 </script>
 <script type="text/x-template" id="deal-chat">
   <div class="deal-page-chat">
@@ -855,34 +665,10 @@ v-bind:settings="settings"
 </script>
 
 <?php include_once 'components/deal-list_js.php' ?>
-<script>
-  Vue.component('deal-page', {
-    props: ['login', 'deal', 'settings', 'statuses', 'statuslist', 'files', 'users', 'member', 'diskdata', 'card', 'dealfieldsinfo', 'showfieldsdefault'],
-    methods: {
-      onDiskFilesData(params)
-      {
-        this.$emit('disk-files-data', params);
-      },
-      logOut()
-      {
-        this.$emit('logout');
-      },
-      back()
-      {
-        this.$emit('back-to-list');
-      },
-      userTitle(param)
-      {
-        this.$emit('user-title', param);
-      },
-      onDealUpdate(param)
-      {
-        this.$emit('deal-update', param);
-      },
-    },
-    template: '#deal-page',
-  });
 
+<?php include_once 'components/deal-page_js.php' ?>
+
+<script>
 
   Vue.component('deal-chat', {
     props: ['login', 'deal', 'settings', 'users', 'member', 'diskdata', 'bxmember'],
@@ -1375,290 +1161,290 @@ v-bind:settings="settings"
 
 <script>
 
-Vue.component('status-bar', {
-  props: ['statuslist', 'statusnames', 'dealstatus', 'type', 'finaltext'],
-  data: function () {
-    return {
-      currentStageIdx: null,
-      currentStageData: {},
-      emptyListStageColor: '#fff',
-      emptyPageStageColor: '#D3D7DC',
-      defaultColor: '#39A8EF',
-      listStagesColors: {},
-      hoverItemId: '',
-      tooltipElem: null,
-    };
-  },
-  methods: {
-    itemHover(event)
-    {
-      var elem = event.target;
-      var stageId = elem.getAttribute('data-id');
-      this.hoverItemId = stageId;
-
-      if (this.tooltipElem) {
-        this.tooltipElem.remove();
-        this.tooltipElem = null;
-      }
-
-      var text = '';
-      if (!stageId && !this.statusnames) return;
-      if (stageId === 'final') {
-        text = this.finaltext;
-      } else {
-        text = this.statusnames[stageId];
-      }
-      if (!text) return;
-      if (text.length === 0) return;
-
-      this.tooltipElem = document.createElement('div');
-      this.tooltipElem.className = 'status-bar-tooltip';
-      this.tooltipElem.innerHTML = text;
-
-      document.body.append(this.tooltipElem);
-
-      var coords = elem.getBoundingClientRect();
-
-      var left = coords.left + (elem.offsetWidth - this.tooltipElem.offsetWidth) / 2;
-      if (left < 0) left = 0;
-
-      var offsetTop = 20;
-      if (this.type === 'deal') offsetTop = 40;
-
-      var top = coords.top + offsetTop;
-      if (top + this.tooltipElem.offsetHeight > window.innerHeight) {
-        top = coords.top - this.tooltipElem.offsetHeight - 5;
-      }
-
-      this.tooltipElem.style.left = left + 'px';
-      this.tooltipElem.style.top = top + 'px';
+  Vue.component('status-bar', {
+    props: ['statuslist', 'statusnames', 'dealstatus', 'type', 'finaltext'],
+    data: function () {
+      return {
+        currentStageIdx: null,
+        currentStageData: {},
+        emptyListStageColor: '#fff',
+        emptyPageStageColor: '#D3D7DC',
+        defaultColor: '#39A8EF',
+        listStagesColors: {},
+        hoverItemId: '',
+        tooltipElem: null,
+      };
     },
-    itemLeave(event)
-    {
-      this.hoverItemId = '';
-      if (this.tooltipElem) {
-        this.tooltipElem.remove();
-        this.tooltipElem = null;
-      }
+    methods: {
+      itemHover(event)
+      {
+        var elem = event.target;
+        var stageId = elem.getAttribute('data-id');
+        this.hoverItemId = stageId;
+
+        if (this.tooltipElem) {
+          this.tooltipElem.remove();
+          this.tooltipElem = null;
+        }
+
+        var text = '';
+        if (!stageId && !this.statusnames) return;
+        if (stageId === 'final') {
+          text = this.finaltext;
+        } else {
+          text = this.statusnames[stageId];
+        }
+        if (!text) return;
+        if (text.length === 0) return;
+
+        this.tooltipElem = document.createElement('div');
+        this.tooltipElem.className = 'status-bar-tooltip';
+        this.tooltipElem.innerHTML = text;
+
+        document.body.append(this.tooltipElem);
+
+        var coords = elem.getBoundingClientRect();
+
+        var left = coords.left + (elem.offsetWidth - this.tooltipElem.offsetWidth) / 2;
+        if (left < 0) left = 0;
+
+        var offsetTop = 20;
+        if (this.type === 'deal') offsetTop = 40;
+
+        var top = coords.top + offsetTop;
+        if (top + this.tooltipElem.offsetHeight > window.innerHeight) {
+          top = coords.top - this.tooltipElem.offsetHeight - 5;
+        }
+
+        this.tooltipElem.style.left = left + 'px';
+        this.tooltipElem.style.top = top + 'px';
+      },
+      itemLeave(event)
+      {
+        this.hoverItemId = '';
+        if (this.tooltipElem) {
+          this.tooltipElem.remove();
+          this.tooltipElem = null;
+        }
+      },
     },
-  },
-  beforeMount() {
-    var defaultColor = this.defaultColor;
-    var emptyColor = this.emptyListStageColor;
-    if (this.type === 'deal') emptyColor = this.emptyPageStageColor;
+    beforeMount() {
+      var defaultColor = this.defaultColor;
+      var emptyColor = this.emptyListStageColor;
+      if (this.type === 'deal') emptyColor = this.emptyPageStageColor;
 
-    for (var i = 0; i < this.statuslist.length; i++)
-    {
-      var statusIdx = parseInt(Object.keys(this.statuslist)[i], 10);
-      var statusData = Object.values(this.statuslist)[i];
+      for (var i = 0; i < this.statuslist.length; i++)
+      {
+        var statusIdx = parseInt(Object.keys(this.statuslist)[i], 10);
+        var statusData = Object.values(this.statuslist)[i];
 
-      if (this.dealstatus && (statusData['STATUS_ID'] === this.dealstatus)) {
-        this.currentStageIdx = statusIdx;
-        this.currentStageData = statusData;
+        if (this.dealstatus && (statusData['STATUS_ID'] === this.dealstatus)) {
+          this.currentStageIdx = statusIdx;
+          this.currentStageData = statusData;
+        }
+
+        this.listStagesColors[statusIdx] = emptyColor;
       }
 
-      this.listStagesColors[statusIdx] = emptyColor;
-    }
+      for (var k = 0; k < this.statuslist.length; k++)
+      {
+        if (!this.dealstatus) break;
 
-    for (var k = 0; k < this.statuslist.length; k++)
-    {
-      if (!this.dealstatus) break;
+        var idx = parseInt(Object.keys(this.statuslist)[k], 10);
 
-      var idx = parseInt(Object.keys(this.statuslist)[k], 10);
-
-      if (this.currentStageIdx !== null) {
-        if (idx <= this.currentStageIdx) {
-          this.listStagesColors[idx] = (this.currentStageData['COLOR']) ? this.currentStageData['COLOR'] : defaultColor;
+        if (this.currentStageIdx !== null) {
+          if (idx <= this.currentStageIdx) {
+            this.listStagesColors[idx] = (this.currentStageData['COLOR']) ? this.currentStageData['COLOR'] : defaultColor;
+          }
         }
       }
-    }
-  },
-  template: '#status-bar',
-});
+    },
+    template: '#status-bar',
+  });
 
-Vue.component('file-upload', {
-  props: ['settings', 'field', 'dealfieldsinfo', 'deal'],
-  data: function () {
-    return {
-      inputFiles: {},
-      stateSendingField: false,
-      requestUrl: this.settings['apiUrl'],
-      fileUploadMethod: this.settings['methods']['fileUploadMethod'],
-    };
-  },
-  methods: {
-    fieldSend()
-    {
-      if (!this.dealfieldsinfo || !this.field) return;
-      var info = this.dealfieldsinfo[this.field];
-      if (!info) return;
-      var isMultiple = info['isMultiple'];
+  Vue.component('file-upload', {
+    props: ['settings', 'field', 'dealfieldsinfo', 'deal'],
+    data: function () {
+      return {
+        inputFiles: {},
+        stateSendingField: false,
+        requestUrl: this.settings['apiUrl'],
+        fileUploadMethod: this.settings['methods']['fileUploadMethod'],
+      };
+    },
+    methods: {
+      fieldSend()
+      {
+        if (!this.dealfieldsinfo || !this.field) return;
+        var info = this.dealfieldsinfo[this.field];
+        if (!info) return;
+        var isMultiple = info['isMultiple'];
 
-      var obj = this;
-      var dealId = parseInt(this.deal, 10);
-      if (isNaN(dealId)) dealId = 0;
-      var field = this.field;
+        var obj = this;
+        var dealId = parseInt(this.deal, 10);
+        if (isNaN(dealId)) dealId = 0;
+        var field = this.field;
 
-      var files = this.inputFiles;
-      var updFiles = [];
-      if (files) {
-        if (isMultiple) {
-          for (var n = 0; n < Object.keys(this.inputFiles).length; n++)
-          {
-            var fKey = Object.keys(this.inputFiles)[n];
-            var fVal = Object.values(this.inputFiles)[n];
+        var files = this.inputFiles;
+        var updFiles = [];
+        if (files) {
+          if (isMultiple) {
+            for (var n = 0; n < Object.keys(this.inputFiles).length; n++)
+            {
+              var fKey = Object.keys(this.inputFiles)[n];
+              var fVal = Object.values(this.inputFiles)[n];
 
-            if (fKey) {
-              var itemContainer = document.getElementById('field-item-id-'+fKey+'-field-'+field);
-              if (itemContainer) {
-                if (itemContainer.className !== 'field-item-disabled field-add-files-item') {
+              if (fKey) {
+                var itemContainer = document.getElementById('field-item-id-'+fKey+'-field-'+field);
+                if (itemContainer) {
+                  if (itemContainer.className !== 'field-item-disabled field-add-files-item') {
 
-                  if (fVal) {
-                    updFiles.push({fileData: fVal});
+                    if (fVal) {
+                      updFiles.push({fileData: fVal});
+                    }
                   }
                 }
               }
             }
+          } else {
+            var fData = Object.values(this.inputFiles)[0];
+            if (fData) updFiles = {fileData: fData};
           }
-        } else {
-          var fData = Object.values(this.inputFiles)[0];
-          if (fData) updFiles = {fileData: fData};
         }
-      }
 
-      if (Object.keys(updFiles).length > 0 && dealId > 0 && field) {
-        this.stateSendingField = true;
+        if (Object.keys(updFiles).length > 0 && dealId > 0 && field) {
+          this.stateSendingField = true;
 
-        var url = this.requestUrl + this.fileUploadMethod;
-        var fields = {};
-        fields[field] = updFiles;
-        var body = {
-          id: dealId,
-          fields: fields,
-        };
-        body = JSON.stringify(body);
+          var url = this.requestUrl + this.fileUploadMethod;
+          var fields = {};
+          fields[field] = updFiles;
+          var body = {
+            id: dealId,
+            fields: fields,
+          };
+          body = JSON.stringify(body);
 
-        fetch(url, {
-          method: 'post',
-          headers: {
+          fetch(url, {
+            method: 'post',
+            headers: {
                         "Accept": "application/json, text/plain, */*",
-            "Content-type": "application/json"
-          },
-          body: body,
-        })
-        .then(res => res.json())
-        .then(function(data) {
-          console.log('Request succeeded with JSON response', data);
+              "Content-type": "application/json"
+            },
+            body: body,
+          })
+          .then(res => res.json())
+          .then(function(data) {
+            console.log('Request succeeded with JSON response', data);
 
-          obj.inputFiles = {};
-          obj.stateSendingField = false;
+            obj.inputFiles = {};
+            obj.stateSendingField = false;
 
-          var result = data.result;
-          if (result) {
-            obj.$emit('deal-update', {dealId: dealId, field: field});
+            var result = data.result;
+            if (result) {
+              obj.$emit('deal-update', {dealId: dealId, field: field});
+            }
+          })
+          .catch(function(error) {
+            console.log('Request failed', error);
+          });
+        }
+      },
+      fieldCancel()
+      {
+        this.inputFiles = {};
+      },
+      addFieldFile()
+      {
+        if (!this.dealfieldsinfo || !this.field) return;
+        var info = this.dealfieldsinfo[this.field];
+        if (!info) return;
+        var isMultiple = info['isMultiple'];
+
+        if (!isMultiple && Object.keys(this.inputFiles).length > 0) return;
+
+        var files = {};
+        var num = 0;
+        if (Object.keys(this.inputFiles).length > 0) {
+          for (var i = 0; i < Object.keys(this.inputFiles).length; i++)
+          {
+            files['n'+num] = Object.values(this.inputFiles)[i];
+            num++;
           }
-        })
-        .catch(function(error) {
-          console.log('Request failed', error);
-        });
-      }
-    },
-    fieldCancel()
-    {
-      this.inputFiles = {};
-    },
-    addFieldFile()
-    {
-      if (!this.dealfieldsinfo || !this.field) return;
-      var info = this.dealfieldsinfo[this.field];
-      if (!info) return;
-      var isMultiple = info['isMultiple'];
+        }
+        files['n'+num] = '';
+        this.inputFiles = files;
+      },
+      removeFieldFile(event)
+      {
+        if (!this.dealfieldsinfo || !this.field) return;
+        var info = this.dealfieldsinfo[this.field];
+        if (!info) return;
+        var isMultiple = info['isMultiple'];
 
-      if (!isMultiple && Object.keys(this.inputFiles).length > 0) return;
+        if (!isMultiple) {
+          this.inputFiles = {};
+          return;
+        }
 
-      var files = {};
-      var num = 0;
-      if (Object.keys(this.inputFiles).length > 0) {
+        var elem = event.target;
+        var elemKey = elem.dataset.id;
+
+        var itemContainer = document.getElementById('field-item-id-'+elemKey+'-field-'+this.field);
+        if (itemContainer) {
+          itemContainer.className = 'field-item-disabled field-add-files-item';
+        }
+
+        var checkedElems = [];
         for (var i = 0; i < Object.keys(this.inputFiles).length; i++)
         {
-          files['n'+num] = Object.values(this.inputFiles)[i];
-          num++;
+          var key = Object.keys(this.inputFiles)[i];
+
+          var item = document.getElementById('field-item-id-'+key+'-field-'+this.field);
+          if (item) {
+            if (!item.classList.contains('field-item-disabled')) checkedElems.push(key);
+          }
         }
-      }
-      files['n'+num] = '';
-      this.inputFiles = files;
-    },
-    removeFieldFile(event)
-    {
-      if (!this.dealfieldsinfo || !this.field) return;
-      var info = this.dealfieldsinfo[this.field];
-      if (!info) return;
-      var isMultiple = info['isMultiple'];
-
-      if (!isMultiple) {
-        this.inputFiles = {};
-        return;
-      }
-
-      var elem = event.target;
-      var elemKey = elem.dataset.id;
-
-      var itemContainer = document.getElementById('field-item-id-'+elemKey+'-field-'+this.field);
-      if (itemContainer) {
-        itemContainer.className = 'field-item-disabled field-add-files-item';
-      }
-
-      var checkedElems = [];
-      for (var i = 0; i < Object.keys(this.inputFiles).length; i++)
+        if (checkedElems.length === 0) this.inputFiles = {};
+      },
+      onFieldFileInput(event)
       {
-        var key = Object.keys(this.inputFiles)[i];
+        var obj = this;
+        var elem = event.target;
+        if (elem) {
 
-        var item = document.getElementById('field-item-id-'+key+'-field-'+this.field);
-        if (item) {
-          if (!item.classList.contains('field-item-disabled')) checkedElems.push(key);
+          var elemKey = elem.dataset.id;
+          if (!elemKey) return;
+
+          var fileData = null;
+          if (elem.files) {
+            fileData = elem.files[0];
+          }
+          var fileName = '';
+          if (fileData) {
+            fileName = fileData['name'];
+          }
+
+          if (fileData) {
+
+            var reader = new FileReader();
+            reader.readAsDataURL(fileData);
+            reader.onloadend = function () {
+
+              var dataEncoded = reader.result;
+              var res = dataEncoded.split(';');
+              var content = res[1].split(',')[1];
+
+              if (content && fileName) {
+                obj.inputFiles[elemKey] = [fileName, content];
+              }
+            };
+          }
+
         }
-      }
-      if (checkedElems.length === 0) this.inputFiles = {};
+      },
     },
-    onFieldFileInput(event)
-    {
-      var obj = this;
-      var elem = event.target;
-      if (elem) {
-
-        var elemKey = elem.dataset.id;
-        if (!elemKey) return;
-
-        var fileData = null;
-        if (elem.files) {
-          fileData = elem.files[0];
-        }
-        var fileName = '';
-        if (fileData) {
-          fileName = fileData['name'];
-        }
-
-        if (fileData) {
-
-          var reader = new FileReader();
-          reader.readAsDataURL(fileData);
-          reader.onloadend = function () {
-
-            var dataEncoded = reader.result;
-            var res = dataEncoded.split(';');
-            var content = res[1].split(',')[1];
-
-            if (content && fileName) {
-              obj.inputFiles[elemKey] = [fileName, content];
-            }
-          };
-        }
-
-      }
-    },
-  },
-  template: '#file-upload',
-});
+    template: '#file-upload',
+  });
 
 Vue.component('top-links', {
   props: ['settings'],

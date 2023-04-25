@@ -34,7 +34,6 @@
     },
 
     getTicketsList: async function () {
-      console.clear();
       this.preloaderVisible = true;
       var queryString = new URLSearchParams();
       queryString.set('filter[ORIGIN_ID]', this.deal.ID);
@@ -46,7 +45,6 @@
     },
 
     addTicketFormSubmit: async function () {
-      console.clear();
       this.preloaderVisible = true;
       var comments = '<b>Service Grund:</b> ' + this.reason + 
       '<br><b>Priorität: </b>' + this.priority + 
