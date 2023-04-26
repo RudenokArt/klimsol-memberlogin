@@ -545,6 +545,7 @@ body {
 .status-items {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 .status-bar-stage-title {
     padding: 5px 0 0 3px;
@@ -555,6 +556,8 @@ body {
 }
 .status-item {
     cursor: pointer;
+    max-width: 10vw;
+    margin-bottom: 5px !important;
 }
 .status-bar-list .status-items {
     background-color: white;

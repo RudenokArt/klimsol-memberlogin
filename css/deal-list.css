@@ -21,7 +21,7 @@
 }
 
 .header-bg-main {
-	width: 75%;
+	width: 75vw;
 	opacity: 0;
 }
 
@@ -29,21 +29,21 @@
 	position: absolute;
 	right: 0;
 	top: 0;
-	width: 50%;
+	width: 50vw;
 }
 
 .header-bg-right-bottom {
 	position: absolute;
 	right: 0;
-	bottom: -6%;
-	width: 37%;
+	top: 29vw;
+	width: 36.5vw;
 }
 
 .header-bg-left {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 75%;
+	width: 75vw;
 }
 
 .header-logo {
