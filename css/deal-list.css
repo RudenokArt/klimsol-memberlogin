@@ -4,8 +4,8 @@
 }
 
 .deal-list-content {
-	background: linear-gradient(transparent, 25%, white);
-	min-height: 100vh;
+	background: linear-gradient(transparent, 15%, white);
+	min-height: 120vh;
 	z-index: 2;
 }
 
