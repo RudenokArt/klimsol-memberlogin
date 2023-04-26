@@ -1,8 +1,59 @@
+.deal-list-page {
+	background: transparent;
+	padding-top: 50vh;
+}
+
+.deal-list-content {
+	background: linear-gradient(transparent, 25%, white);
+	min-height: 100vh;
+	z-index: 2;
+}
+
 
 .header-bg {
 	width: 100%;
+	max-height: 100vh;
+	position: absolute;
+	top:0;
+	left:0;
+	z-index: -1;
+	overflow: hidden;
 }
-.header-bg img {
+
+.header-bg-main {
+	width: 75%;
+	opacity: 0;
+}
+
+.header-bg-right-top {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 50%;
+}
+
+.header-bg-right-bottom {
+	position: absolute;
+	right: 0;
+	bottom: -6%;
+	width: 37%;
+}
+
+.header-bg-left {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 75%;
+}
+
+.header-logo {
+	position: absolute;
+	top: 5%;
+	right: 5%;
+	width: 30%;
+	z-index: 1;
+}
+.header-logo img {
 	width: 100%;
 }
 

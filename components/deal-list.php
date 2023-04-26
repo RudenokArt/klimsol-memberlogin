@@ -1,11 +1,16 @@
 
 
 <div class="deal-list-page">
-
   <div class="header-bg">
-    <img src="img/deal_list-header_bg.jpg" alt="">
+    <img src="img/deal-list/01.png" class="header-bg-main" alt="">
+    <img src="img/deal-list/03.jpg" class="header-bg-right-top" alt="">
+    <img src="img/deal-list/02.jpg" class="header-bg-right-bottom" alt="">
+    <img src="img/deal-list/01.png" class="header-bg-left" alt="">
   </div>
-  <div class="content pb-5">
+<a href="/" class="header-logo">
+      <img src="img/deal-list/04.png" alt="">
+    </a>
+  <div class="content pb-5 deal-list-content">
     <div class="user-login-logout-wrapper">
      <div class="bg-secondary text-white text-center user-login-logout">
       <i class="fa fa-user" aria-hidden="true"></i>
@@ -22,7 +27,7 @@
   <div class="h3">
     {{content.post_title}}
   </div>
-  <div class="h4 pt-5">
+  <div class="h4">
     {{settings['dealListTitle']}}
   </div>
 
@@ -94,7 +99,7 @@
  {{content.post_content}}
 </div>
 <div class="signature">
-  <img src="img/deal_list-signature.jpg" alt="">
+  <img src="img/deal-list/sig.png" alt="klimsol-team">
 </div>
 </div>
 
