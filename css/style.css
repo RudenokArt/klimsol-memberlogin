@@ -546,6 +546,7 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: flex-start !important;
 }
 .status-bar-stage-title {
     padding: 5px 0 0 3px;
