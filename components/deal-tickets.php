@@ -118,8 +118,8 @@
         Service Grund:
         <select v-model="reason" class="form-select" required>
           <option></option>
-          <option>Garantie Fall</option>
-          <option>Reclamation</option>
+          <option>Garantiefall</option>
+          <option>Reklamation</option>
         </select>
       </div>
       <div class="pt-2 pb-2">

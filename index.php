@@ -453,6 +453,7 @@ $data = json_encode($data, true);
 </div>
 
 <script>
+  document.cookie='wp_lang=de_DE';
   var data = JSON.parse('<?=$data?>');
 
   Vue.component('user-login', {
