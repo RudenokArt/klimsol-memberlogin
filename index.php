@@ -153,6 +153,7 @@ $data = json_encode($data, true);
 <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
 <link rel="stylesheet" href="css/deal-list.css?v=<?php echo time(); ?>">
 <link rel="stylesheet" href="css/deal-tickets.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="css/header-menu.css?v=<?php echo time(); ?>">
 
 <script type="text/x-template" id="header-menu">
   <?php include_once 'components/header-menu.php'; ?>
@@ -401,7 +402,7 @@ $data = json_encode($data, true);
   <slot v-else-if="openPage === 'deal-list'">
     <deal-list
     @logout="logOut" @open-deal="openDeal"
-    :login="userLogin" :list="dealsData" :settings="settings" :statuses="statusNames" :statuslist="arStatus" :files="filesData"
+    :login="userLogin" :list="dealsData" :settings="settings" :statuses="statusNames" :statuslist="arStatus" :files="filesData" :logotip="logotip"
     :defaultcard="defaultDealFieldsInfo" :showfields="showListFields"
     />
   </slot>
@@ -1326,7 +1327,7 @@ var app = new Vue({
 
   methods: {
     getLogotip: async function () {
-     var response = await fetch(data.wordpress.apiUrl+'get_custom_logo=Y');
+     var response = await fetch(data.wordpress.apiUrl+'get_custom_logo=2');
      return response.text();
 
    },

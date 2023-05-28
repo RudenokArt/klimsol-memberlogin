@@ -1,0 +1,118 @@
+.header-menu-logotip img {
+	height: 35px;
+	width: auto;
+}
+
+.header-menu {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.header-menu_item {
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+	padding: 10px;
+	display: inline-block;
+}
+
+.header-menu_item .parent-item {
+	border-radius: 20px;
+	padding: 10px;
+}
+
+.header-menu_item:hover {
+	color: black;
+}
+
+.header-menu_item.offer:hover .parent-item,
+.header-menu_item:hover .parent-item {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.header-menu_item i {
+	font-size: 10px;
+}
+
+.header-menu_item.offer span {
+	background: #ffe254;
+}
+
+
+.header-submenu {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	width: 100vw;
+	background: white;
+	opacity: 0;
+	transform: scaleY(0);
+	transition: 0.5s;
+	padding: 50px;
+}
+
+.flex-wrap-around {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.header-menu_item:hover .header-submenu {
+	opacity: 1;
+	transform: scaleY(1);
+	transition: 0.5s;
+}
+
+.header-submenu .about-item {
+	text-decoration: none;
+	color: black;
+}
+
+.header-submenu .about-item-card {
+	display: flex;
+	justify-content: space-around;
+	padding-top: 20px;
+	padding-left: 20px;
+	border-radius: 5px;
+}
+
+.header-submenu .about-item img {
+	width: 130px;
+	border-top-left-radius: 5px;
+	border-top: 2px solid black;
+	border-left: 2px solid black;
+}
+
+.header-submenu .submenu-title {
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.8);
+}
+
+.photovoltaic-item {
+	display: block;
+	text-decoration: none;
+}
+
+.photovoltaic-item-title {
+	padding-left: 20px;
+}
+.photovoltaic-angebot:hover,
+.photovoltaic-angebot {
+	text-decoration:none;
+	color: rgba(0, 0, 0, 0.8);
+}
+
+.disabled-link a {
+	pointer-events: none;
+}
+
+.header-submenu .heat_pumps-item {
+	padding-left: 50px;
+	border-radius: 5px;
+	text-decoration:none;
+	color: rgba(0, 0, 0, 0.8);
+}

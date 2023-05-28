@@ -1,6 +1,6 @@
 <div class="login-page login-page-logo">
-    <top-links :settings="settings['topLinks']"/>
-    <header-menu/>
+    <!-- <top-links :settings="settings['topLinks']"/> -->
+    <header-menu v-bind:logotip="logotip"/>
     <div class="logo">
       <div v-html="logotip" class="login-form-logotip"></div>
     </div>

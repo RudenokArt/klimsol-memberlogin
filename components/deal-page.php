@@ -1,4 +1,5 @@
  <div class="deal-page">
+  <header-menu v-bind:logotip="logotip"/>
   <div class="page-top page-top-deal">
     <div class="top-controls">
       <span class="exit-btn" @click="back()">{{settings.buttons['back']}}</span>

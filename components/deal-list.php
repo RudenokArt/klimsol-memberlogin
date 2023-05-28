@@ -1,6 +1,9 @@
 
 
 <div class="deal-list-page">
+  <div class="header-menu-deals">
+    <header-menu v-bind:logotip="logotip"/>
+  </div>
   <div class="header-bg">
     <img src="img/deal-list/01.png" class="header-bg-main" alt="">
     <img src="img/deal-list/03.jpg" class="header-bg-right-top" alt="">
@@ -54,7 +57,7 @@
                   <slot v-if="defaultcard[fKey]['type'] === 'crm_status'">
                     <slot v-if="statuses[deal[fKey]]">
                       <status-bar
-                      :statuslist="statuslist" :statusnames="statuses"
+                      :statuslist="statuslist" :statusnames="statuses" :logotip="logotip"
                       :dealstatus="deal[fKey]" :type="'list'" :finaltext="settings['finalizeStatusTitle']"
                       />
                     </slot>

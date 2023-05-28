@@ -48,7 +48,7 @@
 
 .header-logo {
 	position: absolute;
-	top: 5%;
+	top: 10%;
 	right: 5%;
 	width: 30%;
 	z-index: 1;
@@ -93,4 +93,13 @@
 
 .signature img {
 	margin: auto;
+}
+
+
+.header-menu-deals {
+	position: fixed;
+	top:0;
+	left: 0;
+	width: 100vw;
+	z-index: 3;
 }

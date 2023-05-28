@@ -1,6 +1,6 @@
 <script>
   Vue.component('deal-page', {
-    props: ['login', 'deal', 'settings', 'statuses', 'statuslist', 'files', 'users', 'member', 'diskdata', 'card', 'dealfieldsinfo', 'showfieldsdefault'],
+    props: ['login', 'deal', 'settings', 'statuses', 'statuslist', 'files', 'users', 'member', 'diskdata', 'card', 'dealfieldsinfo', 'showfieldsdefault', 'logotip'],
     methods: {
       onDiskFilesData(params)
       {

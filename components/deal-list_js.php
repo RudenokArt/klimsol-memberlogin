@@ -1,6 +1,6 @@
 <script>
 Vue.component('deal-list', {
-  props: ['login', 'list', 'settings', 'statuses', 'statuslist', 'files', 'defaultcard', 'showfields'],
+  props: ['login', 'list', 'settings', 'statuses', 'statuslist', 'files', 'defaultcard', 'showfields', 'logotip'],
 
   data: function() {
     return {
