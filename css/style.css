@@ -75,10 +75,10 @@ body {
 .login-page-logo {
     overflow-y: auto;
     flex-direction: column;
-    background-image: url("../img/background.jpg");
-    background-repeat: round round;
+    background-image: url("../img/background-v_2.jpg");
+    background-repeat: no-repeat;
     background-position: center;
-    background-size: 100% 100%;
+    background-size: cover;
     justify-content: normal;
 }
 .logo {
@@ -86,8 +86,12 @@ body {
     /*background-repeat: round no-repeat;*/
     width: 400px;
     height: 128px;
-    margin-bottom: 25px;
+/*    margin-bottom: 25px;*/
     margin-top: auto;
+}
+.login-form-logotip img {
+    max-width: 100%;
+    height: auto!important;
 }
 .auth-block {
     background-color: #FFFFFF;

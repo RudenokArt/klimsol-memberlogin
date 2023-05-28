@@ -8,8 +8,7 @@ Vue.component('deal-list', {
     };
   },
   mounted: async function() {
-    var url = '/ajax/?deal_list_page_content=Y';
-    var response = await fetch(url);
+    var response = await fetch(data.wordpress.apiUrl+'deal_list_page_content=Y');
     var content = await response.json();
     this.content = content;
   },

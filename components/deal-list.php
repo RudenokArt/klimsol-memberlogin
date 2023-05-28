@@ -7,9 +7,9 @@
     <img src="img/deal-list/02.jpg" class="header-bg-right-bottom" alt="">
     <img src="img/deal-list/01.png" class="header-bg-left" alt="">
   </div>
-<a href="/" class="header-logo">
-      <img src="img/deal-list/04.png" alt="">
-    </a>
+  <a href="/" class="header-logo">
+    <img src="img/deal-list/04.png" alt="">
+  </a>
   <div class="content pb-5 deal-list-content">
     <div class="user-login-logout-wrapper">
      <div class="bg-secondary text-white text-center user-login-logout">

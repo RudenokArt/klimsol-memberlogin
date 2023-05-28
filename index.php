@@ -1,5 +1,8 @@
 <?php
 $data = [
+  'wordpress' => [
+    'apiUrl' => 'https://klimsol.info/ajax/?'
+  ],
   'settings' => [
     'apiUrl' => 'https://crm.klimsol.de/rest/36/zuaxtvdzguhrp77x/',
     'arFileUploadFields' => ['UF_CRM_1669375393280', 'UF_CRM_1669375430157', 'UF_CRM_1669375440236'],
@@ -151,54 +154,12 @@ $data = json_encode($data, true);
 <link rel="stylesheet" href="css/deal-list.css?v=<?php echo time(); ?>">
 <link rel="stylesheet" href="css/deal-tickets.css?v=<?php echo time(); ?>">
 
+<script type="text/x-template" id="header-menu">
+  <?php include_once 'components/header-menu.php'; ?>
+</script>
+
 <script type="text/x-template" id="user-login">
-  <div class="login-page login-page-logo">
-    <top-links :settings="settings['topLinks']"/>
-    <div class="logo">
-      <img src="img/logo.png" width="400" height="128" alt="logo"/>
-    </div>
-    <div class="auth-block auth-block-bg">
-      <div class="auth-block-item">
-        <span class="login-title">{{settings['loginTitle']}}</span>
-      </div>
-      <div class="auth-block-item form-block">
-        <input
-        class="login-inp"
-        type="text"
-        :name="settings['loginFields']['login'][0]"
-        :placeholder="settings['loginFields']['login'][1]"
-        maxlength="255"
-        required
-        v-model="userLogin"
-        >
-        <input
-        class="login-inp"
-        type="password"
-        :name="settings['loginFields']['password'][0]"
-        :placeholder="settings['loginFields']['password'][1]"
-        maxlength="255"
-        required
-        v-model="userPassword"
-        >
-      </div>
-      <div class="auth-block-item btn-block">
-        <slot v-if="stateLoading">
-          <span class="login-loader loader"></span>
-        </slot>
-        <slot v-else>
-          <input
-          type="submit"
-          :value="settings.buttons['login']"
-          class="login-btn"
-          @click="logIn()"
-          >
-        </slot>
-        <slot v-if="errors.length > 0">
-          <span class="errors">{{errors.join(', ')}}</span>
-        </slot>
-      </div>
-    </div>
-  </div>
+  <?php include_once 'components/user-login.php'; ?>
 </script>
 
 <script type="text/x-template" id="deal-list">
@@ -447,7 +408,7 @@ $data = json_encode($data, true);
   <slot v-else>
     <user-login
     @user-data="pageListDeals" @check-login-fields="getDealFieldsInfo"
-    :settings="settings" :canlogin="loginFieldsExist" :selectfields="selectFields"
+    :settings="settings" :canlogin="loginFieldsExist" :selectfields="selectFields" :logotip="logotip"
     />
   </slot>
 </div>
@@ -455,168 +416,11 @@ $data = json_encode($data, true);
 <script>
   document.cookie='wp_lang=de_DE';
   var data = JSON.parse('<?=$data?>');
-
-  Vue.component('user-login', {
-    props: ['settings', 'canlogin', 'selectfields'],
-    data: function () {
-      return {
-        userLogin: '',
-        userPassword: '',
-        errors: [],
-        stateLoading: false,
-        disabled: false,
-        requestUrl: this.settings['apiUrl'],
-        requestMethod: this.settings['methods']['requestMethod'],
-        statusMethod: this.settings['methods']['statusMethod'],
-        authFieldsMethod: this.settings['methods']['authFieldsMethod'],
-        getData: [],
-      };
-    },
-    methods: {
-      logIn()
-      {
-        var tooltipElem = document.querySelector('.links-menu-tooltip');
-        if (tooltipElem) tooltipElem.remove();
-        if (this.disabled) return;
-
-        var obj = this;
-        this.userLogin = this.userLogin.replace(/\s+/g, '');
-        this.userPassword = this.userPassword.replace(/\s+/g, '');
-
-        this.errors = [];
-        if (this.userLogin.length === 0 || this.userPassword.length === 0) {
-          this.errors.push(this.settings['errorMessages']['emptyLoginData']);
-        }
-
-        if (this.errors.length === 0) {
-          this.stateLoading = true;
-
-          var url = this.requestUrl + this.requestMethod;
-          var body = {};
-          var filter = {};
-          var lKey = this.settings['loginFields']['login'][0];
-          var pKey = this.settings['loginFields']['password'][0];
-          filter[lKey] = this.userLogin;
-          filter[pKey] = this.userPassword;
-          body['filter'] = filter;
-          body['select'] = this.selectfields;
-          body['order'] = this.settings['dealsSort'];
-          body = JSON.stringify(body);
-
-          fetch(url, {
-            method: 'post',
-            headers: {
-                        "Accept": "application/json, text/plain, */*",
-              "Content-type": "application/json"
-            },
-            body: body,
-          })
-          .then(res => res.json())
-          .then(function(data) {
-            console.log('Request succeeded with JSON response', data);
-            if (data.result) {
-              if (data.result.length > 0) {
-                obj.getData = data.result;
-              } else {
-
-                obj.$emit('user-data', {data: [], userLogin: obj.userLogin, userPassword: obj.userPassword, arStatus: []});
-              }
-            }
-          })
-          .catch(function(error) {
-            console.log('Request failed', error);
-          });
-        }
-      },
-    },
-    mounted() {
-      if (this.canlogin === false) {
-        this.errors.push(this.settings['errorMessages']['checkAuthFields']);
-        this.disabled = true;
-
-      } else if (this.canlogin === '') {
-
-        var obj = this;
-        var url = this.settings['apiUrl'] + this.authFieldsMethod;
-        fetch(url, {
-          method: 'post',
-          headers: {
-                    "Accept": "application/json, text/plain, */*",
-            "Content-type": "application/json",
-          },
-        })
-        .then(res => res.json())
-        .then(function(data) {
-          console.log('Request succeeded with JSON response', data);
-
-          var result = (data.result) ? data.result : {};
-          var checkingFields = [];
-          for (var i = 0; i < Object.values(obj.settings['loginFields']).length; i++)
-          {
-            var fieldData = Object.values(obj.settings['loginFields'])[i];
-            checkingFields.push(fieldData[0]);
-          }
-
-          var check = true;
-          if (checkingFields.length === 0 || result.length === 0) {
-            check = false;
-          } else {
-
-            for (var k = 0; k < checkingFields.length; k++)
-            {
-              var field = checkingFields[k];
-              if (Object.keys(result).indexOf(field) === -1) {
-                check = false;
-                break;
-              }
-            }
-          }
-
-          if (!check) {
-            obj.errors.push(obj.settings['errorMessages']['checkAuthFields']);
-            obj.disabled = true;
-          }
-
-          obj.$emit('check-login-fields', {check: check});
-        })
-        .catch(function(error) {
-          console.log('Request failed', error);
-        });
-      }
-    },
-    watch: {
-      getData(newW, oldW) {
-        var obj = this;
-        var url = this.requestUrl + this.statusMethod;
-        var body = {};
-        body['filter'] = this.settings['filterStatus'];
-        body = JSON.stringify(body);
-
-        fetch(url, {
-          method: 'post',
-          headers: {
-                    "Accept": "application/json, text/plain, */*",
-            "Content-type": "application/json",
-          },
-          body: body,
-        })
-        .then(res => res.json())
-        .then(function(data) {
-          console.log('Request succeeded with JSON response', data);
-
-          obj.$emit('user-data', {data: newW, userLogin: obj.userLogin, userPassword: obj.userPassword, arStatus: data.result});
-        })
-        .catch(function(error) {
-          console.log('Request failed', error);
-
-          obj.$emit('user-data', {data: newW, userLogin: obj.userLogin, userPassword: obj.userPassword, arStatus: []});
-        });
-
-      },
-    },
-    template: '#user-login',
-  });
 </script>
+
+<?php include_once 'components/header-menu_js.php'; ?>
+
+<?php include_once 'components/user-login_js.php'; ?>
 
 <?php include_once 'components/deal-list_js.php' ?>
 
@@ -1513,175 +1317,126 @@ var app = new Vue({
     fieldsMethod: data.settings['methods']['fieldsMethod'],
     getDealDataMethod: data.settings['methods']['getDealDataMethod'],
     showListFields: {},
+    logotip: '',
   },
+
+  mounted: async function () {
+    this.logotip = await this.getLogotip();
+  },
+
   methods: {
-    pageListDeals(data)
-    {
-      this.userLogin = data['userLogin'];
-      this.userPassword = data['userPassword'];
-      this.dealsData = data['data'];
-      this.arStatus = data['arStatus'];
-      this.openPage = 'deal-list';
-      this.openDealData = {};
+    getLogotip: async function () {
+     var response = await fetch(data.wordpress.apiUrl+'get_custom_logo=Y');
+     return response.text();
 
-      if (top.MemberloginChatInterval) {
-        clearInterval(top.MemberloginChatInterval);
+   },
+
+   pageListDeals(data)
+   {
+    this.userLogin = data['userLogin'];
+    this.userPassword = data['userPassword'];
+    this.dealsData = data['data'];
+    this.arStatus = data['arStatus'];
+    this.openPage = 'deal-list';
+    this.openDealData = {};
+
+    if (top.MemberloginChatInterval) {
+      clearInterval(top.MemberloginChatInterval);
+    }
+
+    if (this.dealsData) {
+      this.dealsData = this.getDealListFields();
+
+      if (Object.keys(this.filesData).length === 0) {
+        this.getFilesData(this.filesId);
       }
 
-      if (this.dealsData) {
-        this.dealsData = this.getDealListFields();
+      if (Object.keys(this.dealsData).length > 0) {
 
-        if (Object.keys(this.filesData).length === 0) {
-          this.getFilesData(this.filesId);
-        }
-
-        if (Object.keys(this.dealsData).length > 0) {
-
-          this.checkBitrixMemberUserId();
-        }
+        this.checkBitrixMemberUserId();
       }
-    },
-    getDealListFields()
+    }
+  },
+  getDealListFields()
+  {
+    var data = this.dealsData;
+    var result = [];
+    for (var i = 0; i < data.length; i++)
     {
-      var data = this.dealsData;
-      var result = [];
-      for (var i = 0; i < data.length; i++)
+      var deal = data[i];
+      var newDealData = {};
+
+      for (var k = 0; k < Object.keys(this.dealFieldsInfo).length; k++)
       {
-        var deal = data[i];
-        var newDealData = {};
+        var fieldCode = Object.keys(this.dealFieldsInfo)[k];
+        var fieldInfo = Object.values(this.dealFieldsInfo)[k];
 
-        for (var k = 0; k < Object.keys(this.dealFieldsInfo).length; k++)
-        {
-          var fieldCode = Object.keys(this.dealFieldsInfo)[k];
-          var fieldInfo = Object.values(this.dealFieldsInfo)[k];
+        var type = fieldInfo['type'];
+        var multiple = (typeof fieldInfo['isMultiple'] === 'boolean') ? fieldInfo['isMultiple'] : fieldInfo['isMultiple'] === 'Y';
 
-          var type = fieldInfo['type'];
-          var multiple = (typeof fieldInfo['isMultiple'] === 'boolean') ? fieldInfo['isMultiple'] : fieldInfo['isMultiple'] === 'Y';
+        if (fieldCode in deal) {
+          var value = deal[fieldCode];
+          if (value === null) value = '';
 
-          if (fieldCode in deal) {
-            var value = deal[fieldCode];
-            if (value === null) value = '';
+          if (value.length !== 0 && type === 'file') {
+            if (multiple) {
+              var newValue = [];
+              for (var n = 0; n < value.length; n++)
+              {
+                var fileElem = value[n];
 
-            if (value.length !== 0 && type === 'file') {
-              if (multiple) {
-                var newValue = [];
-                for (var n = 0; n < value.length; n++)
-                {
-                  var fileElem = value[n];
-
-                  var fileId;
-                  if (typeof fileElem === 'number' || typeof fileElem === 'string') {
-                    fileId = parseInt(fileElem, 10);
-                    if (isNaN(fileId)) fileId = 0;
-                  } else if (typeof fileElem === 'object' && fileElem !== null) {
-                    fileId = fileElem.id;
-                  }
-                  if (typeof fileId !== 'undefined' && fileId > 0) {
-                    this.filesId.push(fileId);
-                    newValue.push(fileId);
-                  }
+                var fileId;
+                if (typeof fileElem === 'number' || typeof fileElem === 'string') {
+                  fileId = parseInt(fileElem, 10);
+                  if (isNaN(fileId)) fileId = 0;
+                } else if (typeof fileElem === 'object' && fileElem !== null) {
+                  fileId = fileElem.id;
                 }
-                value = newValue;
-              } else {
-
-                var fId;
-                if (typeof value === 'number' || typeof value === 'string') {
-                  fId = parseInt(value, 10);
-                  if (isNaN(fId)) fId = 0;
-                } else if (typeof value === 'object') {
-                  fId = value.id;
-                }
-                if (typeof fId !== 'undefined' && fId > 0) {
-                  this.filesId.push(fId);
-                  value = fId;
+                if (typeof fileId !== 'undefined' && fileId > 0) {
+                  this.filesId.push(fileId);
+                  newValue.push(fileId);
                 }
               }
-            }
+              value = newValue;
+            } else {
 
-            if (value.length !== 0 && (type === 'date' || type === 'datetime')) {
-              value = ((new Date(value)).toLocaleDateString())+' '+((new Date(value)).toLocaleTimeString().replace(/.\d+$/, ''));
+              var fId;
+              if (typeof value === 'number' || typeof value === 'string') {
+                fId = parseInt(value, 10);
+                if (isNaN(fId)) fId = 0;
+              } else if (typeof value === 'object') {
+                fId = value.id;
+              }
+              if (typeof fId !== 'undefined' && fId > 0) {
+                this.filesId.push(fId);
+                value = fId;
+              }
             }
-
-            newDealData[fieldCode] = value;
           }
+
+          if (value.length !== 0 && (type === 'date' || type === 'datetime')) {
+            value = ((new Date(value)).toLocaleDateString())+' '+((new Date(value)).toLocaleTimeString().replace(/.\d+$/, ''));
+          }
+
+          newDealData[fieldCode] = value;
         }
-        result.push(newDealData);
       }
-      return result;
-    },
-    getFilesData(filesId)
-    {
-      var obj = this;
-      if (filesId.length > 0) {
-        var url = this.requestUrl + this.filesDataMethod;
-        var body = {id: filesId};
-        body = JSON.stringify(body);
-
-        fetch(url, {
-          method: 'post',
-          headers: {
-                        "Accept": "application/json, text/plain, */*",
-            "Content-type": "application/json"
-          },
-          body: body,
-        })
-        .then(res => res.json())
-        .then(function(data) {
-          console.log('Request succeeded with JSON response', data);
-
-          if (data.result) {
-            if (data.result.files) {
-              obj.filesData = data.result.files;
-              obj.onFilesData(obj.filesData)
-            }
-          }
-        })
-        .catch(function(error) {
-          console.log('Request failed', error);
-        });
-      }
-    },
-    getDealFieldsInfo(data)
-    {
-      this.loginFieldsExist = data['check'];
-
-      if (this.loginFieldsExist) {
-        var obj = this;
-        var url = this.requestUrl + this.fieldsMethod;
-        fetch(url, {
-          method: 'post',
-          headers: {
-                        "Accept": "application/json, text/plain, */*",
-            "Content-type": "application/json",
-          },
-        })
-        .then(res => res.json())
-        .then(function(data) {
-          console.log('Request succeeded with JSON response', data);
-
-          obj.dealFieldsInfo = (data.result) ? data.result : {};
-          obj.getCardView();
-        })
-        .catch(function(error) {
-          console.log('Request failed', error);
-        });
-      }
-    },
-    getCardView()
-    {
-      var listFields = Object.keys(this.dealFieldsInfo);
-      if (listFields.length === 0) return;
-
-      var url = this.requestUrl + this.cardViewMethod;
-      var body = {};
-      body['arDealFields'] = listFields;
+      result.push(newDealData);
+    }
+    return result;
+  },
+  getFilesData(filesId)
+  {
+    var obj = this;
+    if (filesId.length > 0) {
+      var url = this.requestUrl + this.filesDataMethod;
+      var body = {id: filesId};
       body = JSON.stringify(body);
 
-      var obj = this;
       fetch(url, {
         method: 'post',
         headers: {
-                    "Accept": "application/json, text/plain, */*",
+                        "Accept": "application/json, text/plain, */*",
           "Content-type": "application/json"
         },
         body: body,
@@ -1691,242 +1446,178 @@ var app = new Vue({
         console.log('Request succeeded with JSON response', data);
 
         if (data.result) {
-          if (Object.keys(data.result).length > 0) {
-            obj.dealCardView = data.result;
-
-            var selectFields = [];
-
-            var dealCardInfo = [];
-            for (var i = 0; i < Object.keys(obj.dealCardView).length; i++)
-            {
-              var val = Object.values(obj.dealCardView)[i];
-              var sectFields = val['sectFields'];
-              var sectAlwaysShowFields = val['sectAlwaysShowFields'];
-
-              var sectFieldsInfo = {};
-              for (var k = 0; k < sectFields.length; k++)
-              {
-                var fName = sectFields[k];
-                var info = obj.dealFieldsInfo[fName];
-                if (info) {
-                  if (fName === 'ID' || fName === 'STAGE_ID') {
-                    sectFieldsInfo[fName] = info;
-                  } else {
-                    var type = info['type'];
-                    if (type && obj.settings.arFieldTypes) {
-                      if (obj.settings.arFieldTypes.indexOf(type) !== -1) {
-                        sectFieldsInfo[fName] = info;
-                      }
-                    }
-                  }
-                }
-
-                if (selectFields.indexOf(fName) === -1 && fName !== 'CONTACT_IDS') selectFields.push(fName);
-              }
-
-              if (Object.keys(sectFieldsInfo).length > 0) {
-                var newCardInfo = {
-                  sectName: val['sectName'],
-                  sectTitle: val['sectTitle'],
-                  sectFields: sectFieldsInfo,
-                  sectAlwaysShowFields: sectAlwaysShowFields,
-                };
-                dealCardInfo.push(newCardInfo);
-              }
-            }
-
-            if (selectFields.indexOf('ID') === -1) selectFields.push('ID');
-            if (selectFields.indexOf('STAGE_ID') === -1) selectFields.push('STAGE_ID');
-            for (var n = 0; n < obj.defaultDealFields.length; n++)
-            {
-              var defaultFieldName = obj.defaultDealFields[n];
-
-              if (selectFields.indexOf(defaultFieldName) === -1) {
-                selectFields.push(defaultFieldName);
-              }
-
-              var defInfo = obj.dealFieldsInfo[defaultFieldName];
-              if (defInfo && !obj.defaultDealFieldsInfo[defaultFieldName]) {
-                obj.defaultDealFieldsInfo[defaultFieldName] = defInfo;
-              }
-            }
-
-            obj.selectFields = selectFields;
-            obj.dealCardInfo = dealCardInfo;
-
-            obj.showListFields = obj.getShowListFields();
+          if (data.result.files) {
+            obj.filesData = data.result.files;
+            obj.onFilesData(obj.filesData)
           }
         }
       })
       .catch(function(error) {
         console.log('Request failed', error);
       });
-    },
-    getShowListFields()
-    {
-      var showFields = {};
-      for (var i = 0; i < Object.values(this.defaultDealFieldsInfo).length; i++)
-      {
-        var fieldCode = Object.keys(this.defaultDealFieldsInfo)[i];
-        var field = Object.values(this.defaultDealFieldsInfo)[i];
-        var title = field['title'];
-        if (field['formLabel']) {
-          title = field['formLabel'];
-        } else if (field['filterLabel']) {
-          title = field['filterLabel'];
-        } else if (field['listLabel']) {
-          title = field['listLabel'];
-        }
-        showFields[fieldCode] = title;
-      }
-      return  showFields;
-    },
-    checkBitrixMemberUserId()
-    {
-      var login = this.userLogin;
-      var password = this.userPassword;
-      var memberId = parseInt(this.bxMemberId, 10);
-      if (isNaN(memberId)) memberId = 0;
+    }
+  },
+  getDealFieldsInfo(data)
+  {
+    this.loginFieldsExist = data['check'];
 
-      if (memberId === 0 && login.length > 0 && password.length > 0) {
-
-        var obj = this;
-        var url = this.requestUrl + this.memberRegisterMethod;
-        var body = {
-          login: login,
-          password: password,
-        };
-        body = JSON.stringify(body);
-
-        fetch(url, {
-          method: 'post',
-          headers: {
+    if (this.loginFieldsExist) {
+      var obj = this;
+      var url = this.requestUrl + this.fieldsMethod;
+      fetch(url, {
+        method: 'post',
+        headers: {
                         "Accept": "application/json, text/plain, */*",
-            "Content-type": "application/json",
-          },
-          body: body,
-        })
-        .then(res => res.json())
-        .then(function(data) {
-          console.log('Request succeeded with JSON response', data);
+          "Content-type": "application/json",
+        },
+      })
+      .then(res => res.json())
+      .then(function(data) {
+        console.log('Request succeeded with JSON response', data);
 
-          var result = data.result;
-          if (result) {
+        obj.dealFieldsInfo = (data.result) ? data.result : {};
+        obj.getCardView();
+      })
+      .catch(function(error) {
+        console.log('Request failed', error);
+      });
+    }
+  },
+  getCardView()
+  {
+    var listFields = Object.keys(this.dealFieldsInfo);
+    if (listFields.length === 0) return;
 
-            var userId = result.id;
-            if (userId) parseInt(userId, 10);
-            if (userId > 0) obj.bxMemberId = userId;
-          }
+    var url = this.requestUrl + this.cardViewMethod;
+    var body = {};
+    body['arDealFields'] = listFields;
+    body = JSON.stringify(body);
 
-        })
-        .catch(function(error) {
-          console.log('Request failed', error);
-        });
-      }
-    },
-    openDeal(data)
-    {
-      var dealId = data.dealId;
-      this.openDealData = {};
-      for (var i = 0; i < this.dealsData.length; i++)
-      {
-        var item = this.dealsData[i];
-        if (parseInt(item['ID'], 10) === parseInt(dealId, 10)) {
+    var obj = this;
+    fetch(url, {
+      method: 'post',
+      headers: {
+                    "Accept": "application/json, text/plain, */*",
+        "Content-type": "application/json"
+      },
+      body: body,
+    })
+    .then(res => res.json())
+    .then(function(data) {
+      console.log('Request succeeded with JSON response', data);
 
-          this.openDealData = item;
-          break;
-        }
-      }
+      if (data.result) {
+        if (Object.keys(data.result).length > 0) {
+          obj.dealCardView = data.result;
 
-      if (Object.keys(this.openDealData).length > 0) {
-        this.openPage = 'deal-page';
-      }
-    },
-    onFilesData(data)
-    {
-      var files = data['files'];
-      if (files) {
-        if (Object.keys(files).length > 0) {
+          var selectFields = [];
 
-          for (var i = 0; i < Object.keys(files).length; i++)
+          var dealCardInfo = [];
+          for (var i = 0; i < Object.keys(obj.dealCardView).length; i++)
           {
-            var fileVal = Object.values(files)[i];
-            var fileKey = Object.keys(files)[i];
+            var val = Object.values(obj.dealCardView)[i];
+            var sectFields = val['sectFields'];
+            var sectAlwaysShowFields = val['sectAlwaysShowFields'];
 
-            if (fileVal['CONTENT_TYPE'] === 'image/png') {
-              var imgHeight = parseInt(fileVal['HEIGHT'], 10);
-              if (isNaN(imgHeight) || imgHeight < 1) imgHeight = 1;
-              var imgWidth = parseInt(fileVal['WIDTH'], 10);
-              if (isNaN(imgWidth) || imgWidth < 1) imgWidth = 1;
+            var sectFieldsInfo = {};
+            for (var k = 0; k < sectFields.length; k++)
+            {
+              var fName = sectFields[k];
+              var info = obj.dealFieldsInfo[fName];
+              if (info) {
+                if (fName === 'ID' || fName === 'STAGE_ID') {
+                  sectFieldsInfo[fName] = info;
+                } else {
+                  var type = info['type'];
+                  if (type && obj.settings.arFieldTypes) {
+                    if (obj.settings.arFieldTypes.indexOf(type) !== -1) {
+                      sectFieldsInfo[fName] = info;
+                    }
+                  }
+                }
+              }
 
-              files[fileKey]['HEIGHT'] = imgHeight;
-              files[fileKey]['WIDTH'] = imgWidth;
+              if (selectFields.indexOf(fName) === -1 && fName !== 'CONTACT_IDS') selectFields.push(fName);
+            }
+
+            if (Object.keys(sectFieldsInfo).length > 0) {
+              var newCardInfo = {
+                sectName: val['sectName'],
+                sectTitle: val['sectTitle'],
+                sectFields: sectFieldsInfo,
+                sectAlwaysShowFields: sectAlwaysShowFields,
+              };
+              dealCardInfo.push(newCardInfo);
             }
           }
 
-          this.filesData = files;
+          if (selectFields.indexOf('ID') === -1) selectFields.push('ID');
+          if (selectFields.indexOf('STAGE_ID') === -1) selectFields.push('STAGE_ID');
+          for (var n = 0; n < obj.defaultDealFields.length; n++)
+          {
+            var defaultFieldName = obj.defaultDealFields[n];
+
+            if (selectFields.indexOf(defaultFieldName) === -1) {
+              selectFields.push(defaultFieldName);
+            }
+
+            var defInfo = obj.dealFieldsInfo[defaultFieldName];
+            if (defInfo && !obj.defaultDealFieldsInfo[defaultFieldName]) {
+              obj.defaultDealFieldsInfo[defaultFieldName] = defInfo;
+            }
+          }
+
+          obj.selectFields = selectFields;
+          obj.dealCardInfo = dealCardInfo;
+
+          obj.showListFields = obj.getShowListFields();
         }
       }
-    },
-    onDiskFilesData(data)
+    })
+    .catch(function(error) {
+      console.log('Request failed', error);
+    });
+  },
+  getShowListFields()
+  {
+    var showFields = {};
+    for (var i = 0; i < Object.values(this.defaultDealFieldsInfo).length; i++)
     {
-      if (data['diskFilesData']) {
-        this.diskFilesData = data['diskFilesData'];
+      var fieldCode = Object.keys(this.defaultDealFieldsInfo)[i];
+      var field = Object.values(this.defaultDealFieldsInfo)[i];
+      var title = field['title'];
+      if (field['formLabel']) {
+        title = field['formLabel'];
+      } else if (field['filterLabel']) {
+        title = field['filterLabel'];
+      } else if (field['listLabel']) {
+        title = field['listLabel'];
       }
-    },
-    backToList()
-    {
-      this.openPage = 'deal-list';
-      this.openDealData = {};
+      showFields[fieldCode] = title;
+    }
+    return  showFields;
+  },
+  checkBitrixMemberUserId()
+  {
+    var login = this.userLogin;
+    var password = this.userPassword;
+    var memberId = parseInt(this.bxMemberId, 10);
+    if (isNaN(memberId)) memberId = 0;
 
-      if (top.MemberloginChatInterval) {
-        clearInterval(top.MemberloginChatInterval);
-      }
-    },
-    logOut()
-    {
-      this.userLogin = '';
-      this.userPassword = '';
-      this.bxMemberId = 0;
-      this.dealsData = [];
-      this.openDealData = {};
-      this.openPage = 'user-login';
-
-      if (top.MemberloginChatInterval) {
-        clearInterval(top.MemberloginChatInterval);
-      }
-    },
-    userTitle(params)
-    {
-      var uId = params['id'];
-      var name = params['userTitle'];
-      if (uId && name) {
-
-        if (!this.userNames[uId]) this.userNames[uId] = name;
-      }
-    },
-    onDealUpdate(params)
-    {
-      var dealId = parseInt(params.dealId, 10);
-      if (isNaN(dealId)) dealId = 0;
-      var field = params.field;
-      if (!field || dealId === 0) return;
-      var fieldInfo = this.dealFieldsInfo[field];
-      if (!fieldInfo) return;
+    if (memberId === 0 && login.length > 0 && password.length > 0) {
 
       var obj = this;
-      var url = this.requestUrl + this.getDealDataMethod;
+      var url = this.requestUrl + this.memberRegisterMethod;
       var body = {
-        dealId: dealId,
-        field: field,
-        fieldInfo: fieldInfo,
+        login: login,
+        password: password,
       };
       body = JSON.stringify(body);
 
       fetch(url, {
         method: 'post',
         headers: {
-                    "Accept": "application/json, text/plain, */*",
+                        "Accept": "application/json, text/plain, */*",
           "Content-type": "application/json",
         },
         body: body,
@@ -1936,77 +1627,202 @@ var app = new Vue({
         console.log('Request succeeded with JSON response', data);
 
         var result = data.result;
-        if (!result) return;
-        var arDeal = result.arDeal;
-        var field = result.field;
-        var filesData = result.filesData;
-        if (!arDeal || !field || !filesData) return;
-        var dealId = parseInt(arDeal['ID'], 10);
-        if (isNaN(dealId)) dealId = 0;
-        if (dealId === 0) return;
-        var fieldValue = arDeal[field];
+        if (result) {
 
-        if (obj.openDealData) {
-          var openDealId = parseInt(obj.openDealData['ID'], 10);
-          if (isNaN(openDealId)) openDealId = 0;
-          if (dealId === openDealId) {
-            obj.openDealData[field] = fieldValue;
-          }
-        }
-
-        if (obj.dealsData) {
-          for (var i = 0; i < Object.keys(obj.dealsData).length; i++)
-          {
-            var dealIdx = Object.keys(obj.dealsData)[i];
-            var dealValue = Object.values(obj.dealsData)[i];
-
-            var dataDealId = parseInt(dealValue['ID'], 10);
-            if (dataDealId !== dealId) continue;
-
-            obj.dealsData[dealIdx][field] = fieldValue;
-            break;
-          }
-        }
-
-        var type = '';
-        if (obj.dealFieldsInfo) {
-          if (obj.dealFieldsInfo[field]) {
-            type = obj.dealFieldsInfo[field]['type'];
-          }
-        }
-
-        if (type === 'file' && fieldValue && obj.filesData) {
-          for (var n = 0; n < Object.keys(filesData).length; n++)
-          {
-            var fileId = Object.keys(filesData)[n];
-            var fileData = Object.values(filesData)[n];
-
-            if (!obj.filesData[fileId]) {
-              obj.filesData[fileId] = fileData;
-            }
-          }
+          var userId = result.id;
+          if (userId) parseInt(userId, 10);
+          if (userId > 0) obj.bxMemberId = userId;
         }
 
       })
       .catch(function(error) {
         console.log('Request failed', error);
       });
-    },
+    }
   },
-  watch: {
-    arStatus(newW, oldW) {
-      if (newW.length > 0) {
-        for (var i = 0; i < newW.length; i++)
+  openDeal(data)
+  {
+    var dealId = data.dealId;
+    this.openDealData = {};
+    for (var i = 0; i < this.dealsData.length; i++)
+    {
+      var item = this.dealsData[i];
+      if (parseInt(item['ID'], 10) === parseInt(dealId, 10)) {
+
+        this.openDealData = item;
+        break;
+      }
+    }
+
+    if (Object.keys(this.openDealData).length > 0) {
+      this.openPage = 'deal-page';
+    }
+  },
+  onFilesData(data)
+  {
+    var files = data['files'];
+    if (files) {
+      if (Object.keys(files).length > 0) {
+
+        for (var i = 0; i < Object.keys(files).length; i++)
         {
-          var statusItem = newW[i];
+          var fileVal = Object.values(files)[i];
+          var fileKey = Object.keys(files)[i];
 
-          if (!statusItem['ENTITY_ID'].match(/^DEAL_STAGE/)) continue;
+          if (fileVal['CONTENT_TYPE'] === 'image/png') {
+            var imgHeight = parseInt(fileVal['HEIGHT'], 10);
+            if (isNaN(imgHeight) || imgHeight < 1) imgHeight = 1;
+            var imgWidth = parseInt(fileVal['WIDTH'], 10);
+            if (isNaN(imgWidth) || imgWidth < 1) imgWidth = 1;
 
-          this.statusNames[statusItem['STATUS_ID']] = statusItem['NAME'];
+            files[fileKey]['HEIGHT'] = imgHeight;
+            files[fileKey]['WIDTH'] = imgWidth;
+          }
+        }
+
+        this.filesData = files;
+      }
+    }
+  },
+  onDiskFilesData(data)
+  {
+    if (data['diskFilesData']) {
+      this.diskFilesData = data['diskFilesData'];
+    }
+  },
+  backToList()
+  {
+    this.openPage = 'deal-list';
+    this.openDealData = {};
+
+    if (top.MemberloginChatInterval) {
+      clearInterval(top.MemberloginChatInterval);
+    }
+  },
+  logOut()
+  {
+    this.userLogin = '';
+    this.userPassword = '';
+    this.bxMemberId = 0;
+    this.dealsData = [];
+    this.openDealData = {};
+    this.openPage = 'user-login';
+
+    if (top.MemberloginChatInterval) {
+      clearInterval(top.MemberloginChatInterval);
+    }
+  },
+  userTitle(params)
+  {
+    var uId = params['id'];
+    var name = params['userTitle'];
+    if (uId && name) {
+
+      if (!this.userNames[uId]) this.userNames[uId] = name;
+    }
+  },
+  onDealUpdate(params)
+  {
+    var dealId = parseInt(params.dealId, 10);
+    if (isNaN(dealId)) dealId = 0;
+    var field = params.field;
+    if (!field || dealId === 0) return;
+    var fieldInfo = this.dealFieldsInfo[field];
+    if (!fieldInfo) return;
+
+    var obj = this;
+    var url = this.requestUrl + this.getDealDataMethod;
+    var body = {
+      dealId: dealId,
+      field: field,
+      fieldInfo: fieldInfo,
+    };
+    body = JSON.stringify(body);
+
+    fetch(url, {
+      method: 'post',
+      headers: {
+                    "Accept": "application/json, text/plain, */*",
+        "Content-type": "application/json",
+      },
+      body: body,
+    })
+    .then(res => res.json())
+    .then(function(data) {
+      console.log('Request succeeded with JSON response', data);
+
+      var result = data.result;
+      if (!result) return;
+      var arDeal = result.arDeal;
+      var field = result.field;
+      var filesData = result.filesData;
+      if (!arDeal || !field || !filesData) return;
+      var dealId = parseInt(arDeal['ID'], 10);
+      if (isNaN(dealId)) dealId = 0;
+      if (dealId === 0) return;
+      var fieldValue = arDeal[field];
+
+      if (obj.openDealData) {
+        var openDealId = parseInt(obj.openDealData['ID'], 10);
+        if (isNaN(openDealId)) openDealId = 0;
+        if (dealId === openDealId) {
+          obj.openDealData[field] = fieldValue;
         }
       }
-    },
+
+      if (obj.dealsData) {
+        for (var i = 0; i < Object.keys(obj.dealsData).length; i++)
+        {
+          var dealIdx = Object.keys(obj.dealsData)[i];
+          var dealValue = Object.values(obj.dealsData)[i];
+
+          var dataDealId = parseInt(dealValue['ID'], 10);
+          if (dataDealId !== dealId) continue;
+
+          obj.dealsData[dealIdx][field] = fieldValue;
+          break;
+        }
+      }
+
+      var type = '';
+      if (obj.dealFieldsInfo) {
+        if (obj.dealFieldsInfo[field]) {
+          type = obj.dealFieldsInfo[field]['type'];
+        }
+      }
+
+      if (type === 'file' && fieldValue && obj.filesData) {
+        for (var n = 0; n < Object.keys(filesData).length; n++)
+        {
+          var fileId = Object.keys(filesData)[n];
+          var fileData = Object.values(filesData)[n];
+
+          if (!obj.filesData[fileId]) {
+            obj.filesData[fileId] = fileData;
+          }
+        }
+      }
+
+    })
+    .catch(function(error) {
+      console.log('Request failed', error);
+    });
   },
+},
+watch: {
+  arStatus(newW, oldW) {
+    if (newW.length > 0) {
+      for (var i = 0; i < newW.length; i++)
+      {
+        var statusItem = newW[i];
+
+        if (!statusItem['ENTITY_ID'].match(/^DEAL_STAGE/)) continue;
+
+        this.statusNames[statusItem['STATUS_ID']] = statusItem['NAME'];
+      }
+    }
+  },
+},
 });
 
 </script>
