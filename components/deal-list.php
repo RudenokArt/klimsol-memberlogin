@@ -57,7 +57,7 @@
                   <slot v-if="defaultcard[fKey]['type'] === 'crm_status'">
                     <slot v-if="statuses[deal[fKey]]">
                       <status-bar
-                      :statuslist="statuslist" :statusnames="statuses" :logotip="logotip"
+                      :statuslist="statuslist" :statusnames="statuses"
                       :dealstatus="deal[fKey]" :type="'list'" :finaltext="settings['finalizeStatusTitle']"
                       />
                     </slot>

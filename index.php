@@ -395,7 +395,7 @@ $data = json_encode($data, true);
     <deal-page
     @user-title="userTitle" @logout="logOut" @back-to-list="backToList" @disk-files-data="onDiskFilesData" @deal-update="onDealUpdate"
     :login="userLogin" :deal="openDealData" :settings="settings" :statuses="statusNames" :statuslist="arStatus" :files="filesData" :diskdata="diskFilesData"
-    :users="userNames" :member="bxMemberId"
+    :users="userNames" :member="bxMemberId"  :logotip="logotip"
     :card="dealCardInfo" :dealfieldsinfo="dealFieldsInfo" :showfieldsdefault="showListFields"
     />
   </slot>

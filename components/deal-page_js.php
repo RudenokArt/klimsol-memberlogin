@@ -27,7 +27,7 @@
 
     mounted: async function () {
       console.clear();
-      console.log('1111111111111111');
+      console.log(this.logotip);
       var url = this.settings.apiUrl + 'deal.fields.filter';
       var response = await fetch(url);
       var content = await response.json();
@@ -41,7 +41,6 @@
         }
       }
       this.dealfieldsinfo = dealFieldsFilter;
-      console.log('222222222222222222');
     }
   });
 </script>

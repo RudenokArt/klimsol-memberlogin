@@ -24,7 +24,7 @@
 									<div class="text-white">Lernen Sie uns kennen</div>
 								</div>
 								<div>
-									<img src="/img/header-menu/uberUns.webp" alt="Über Uns">
+									<img src="img/header-menu/uberUns.webp" alt="Über Uns">
 								</div>
 							</div>
 						</a>
@@ -36,7 +36,7 @@
 									<div class="text-white">Hier gehts zu unserem Blog</div>
 								</div>
 								<div>
-									<img src="/img/header-menu/blog.webp" alt="Blog">
+									<img src="img/header-menu/blog.webp" alt="Blog">
 								</div>
 							</div>
 						</a>
@@ -48,7 +48,7 @@
 									<div class="text-white">Finde deinen Traumjob</div>
 								</div>
 								<div>
-									<img src="/img/header-menu/jobs.webp" alt="Jobs">
+									<img src="img/header-menu/jobs.webp" alt="Jobs">
 								</div>
 							</div>
 						</a>
@@ -68,29 +68,29 @@
 					<div class="row">
 						<div class="col-lg-4 col-md-12 pt-5">
 							<a href="https://klimsol.de/photovoltaikanlagen/" class="pt-3 pb-3 submenu-title border-bottom photovoltaic-item">
-								<img src="/img/header-menu/Photovoltaikanlagen.svg" width="40" alt="">
+								<img src="img/header-menu/Photovoltaikanlagen.svg" width="40" alt="">
 								<span class="photovoltaic-item-title">Photovoltaikanlagen</span>
 							</a>
 							<a href="https://klimsol.de/energiespeicher/" class="pt-3 pb-3 submenu-title border-bottom photovoltaic-item">
-								<img src="/img/header-menu/Energiespeicher.svg" width="40" alt="">
+								<img src="img/header-menu/Energiespeicher.svg" width="40" alt="">
 								<span class="photovoltaic-item-title">Energiespeicher</span>
 							</a>
 							<a href="https://klimsol.de/anmeldung-beim-netzbetreiber/" class="pt-3 pb-3 submenu-title border-bottom photovoltaic-item">
-								<img src="/img/header-menu/Anmeldung.svg" width="40" alt="">
+								<img src="img/header-menu/Anmeldung.svg" width="40" alt="">
 								<span class="photovoltaic-item-title">Anmeldung beim Netzbetreiber</span>
 							</a>
 						</div>
 						<div class="col-lg-4 col-md-12 pt-5">
 							<a href="https://klimsol.de/pv-parks/" class="pt-3 pb-3 submenu-title border-bottom photovoltaic-item">
-								<img src="/img/header-menu/Parks.svg" width="40" alt="">
+								<img src="img/header-menu/Parks.svg" width="40" alt="">
 								<span class="photovoltaic-item-title">PV Parks</span>
 							</a>
 							<a href="https://klimsol.de/trafostationen/" class="pt-3 pb-3 submenu-title border-bottom photovoltaic-item">
-								<img src="/img/header-menu/Trafostationen.svg" width="40" alt="">
+								<img src="img/header-menu/Trafostationen.svg" width="40" alt="">
 								<span class="photovoltaic-item-title">Trafostationen</span>
 							</a>
 							<a href="https://klimsol.de/foerderung/" class="pt-3 pb-3 submenu-title border-bottom photovoltaic-item">
-								<img src="/img/header-menu/Förderungen.svg" width="40" alt="">
+								<img src="img/header-menu/Förderungen.svg" width="40" alt="">
 								<span class="photovoltaic-item-title">Förderungen</span>
 							</a>
 						</div>
@@ -105,7 +105,7 @@
 									</div>
 									<div class="w-100 p-2">
 										<div>
-											<img src="/img/header-menu/angebot.webp" class="w-100" alt="">
+											<img src="img/header-menu/angebot.webp" class="w-100" alt="">
 										</div>
 									</div>
 									
@@ -136,7 +136,7 @@
 									<div>Wärmepumpen</div>
 								</div>
 								<div class="col-4">
-									<img src="/img/header-menu/Wärmepumpen.webp" class="w-100" alt="">
+									<img src="img/header-menu/Wärmepumpen.webp" class="w-100" alt="">
 								</div>
 							</a>
 							<a href="https://klimsol.de/waermepumpen-wartung/" class="row bg-light pt-3 mt-3 heat_pumps-item">
@@ -148,14 +148,14 @@
 									<div>Wärmepumpen</div>
 								</div>
 								<div class="col-4">
-									<img src="/img/header-menu/Wartungsservice.webp" class="w-100" alt="">
+									<img src="img/header-menu/Wartungsservice.webp" class="w-100" alt="">
 								</div>
 							</a>
 						</div>
 						<div class="col-lg-4 col-md-12">
 							<a href="https://klimsol.de/waermepumpen/grosswaermepumpen/" class="row pt-3 mt-3 heat_pumps-item">
 								<div class="col-4 border-bottom">
-									<img src="/img/header-menu/Großwärmepumpen.png" class="w-100" alt="">
+									<img src="img/header-menu/Großwärmepumpen.png" class="w-100" alt="">
 								</div>
 								<div class="col-8 pt-3 border-bottom submenu-title">
 									<div>Großwärmepumpen</div>
@@ -163,7 +163,7 @@
 							</a>
 							<a href="https://klimsol.de/waermepumpen/wasser-wasser-waermepumpen/" class="row pt-3 mt-3 heat_pumps-item">
 								<div class="col-4 border-bottom">
-									<img src="/img/header-menu/Wasser-Wasser-Wärmepumpen.png" class="w-100" alt="">
+									<img src="img/header-menu/Wasser-Wasser-Wärmepumpen.png" class="w-100" alt="">
 								</div>
 								<div class="col-8 border-bottom pt-3 submenu-title">
 									<div>Wasser-Wasser-Wärmepumpen</div>
@@ -173,7 +173,7 @@
 						<div class="col-lg-4 col-md-12">
 							<a href="https://klimsol.de/waermepumpen/sole-wasser-waermepumpen/" class="row pt-3 mt-3 heat_pumps-item">
 								<div class="col-4 border-bottom">
-									<img src="/img/header-menu/Sole-Wasser-Wärmepumpen.jpg" class="w-100" alt="">
+									<img src="img/header-menu/Sole-Wasser-Wärmepumpen.jpg" class="w-100" alt="">
 								</div>
 								<div class="col-8 pt-3 submenu-title border-bottom">
 									<div>Sole-Wasser-Wärmepumpen</div>
@@ -181,7 +181,7 @@
 							</a>
 							<a href="https://klimsol.de/waermepumpen/luft-wasser-waermepumpe/" class="row pt-3 mt-3 heat_pumps-item">
 								<div class="col-4 border-bottom">
-									<img src="/img/header-menu/Luft-Wasser_Wärmepumpe.jpeg" class="w-100" alt="">
+									<img src="img/header-menu/Luft-Wasser_Wärmepumpe.jpeg" class="w-100" alt="">
 								</div>
 								<div class="col-8 border-bottom pt-3 submenu-title">
 									<div>Luft-Wasser Wärmepumpe</div>
