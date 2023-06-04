@@ -1,4 +1,5 @@
 <?php
+$app_folder = '/memberlogin-new/';
 $data = [
   'wordpress' => [
     'apiUrl' => 'https://klimsol.info/ajax/?'
@@ -150,10 +151,10 @@ $data = json_encode($data, true);
 <!-- BOOTSTRAP -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-<link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
-<link rel="stylesheet" href="css/deal-list.css?v=<?php echo time(); ?>">
-<link rel="stylesheet" href="css/deal-tickets.css?v=<?php echo time(); ?>">
-<link rel="stylesheet" href="css/header-menu.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="<?php echo $app_folder; ?>css/style.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="<?php echo $app_folder; ?>css/deal-list.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="<?php echo $app_folder; ?>css/deal-tickets.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="<?php echo $app_folder; ?>css/header-menu.css?v=<?php echo time(); ?>">
 
 <script type="text/x-template" id="header-menu">
   <?php include_once 'components/header-menu.php'; ?>

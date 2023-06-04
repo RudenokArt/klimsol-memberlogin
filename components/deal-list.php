@@ -5,13 +5,13 @@
     <header-menu v-bind:logotip="logotip"/>
   </div>
   <div class="header-bg">
-    <img src="img/deal-list/01.png" class="header-bg-main" alt="">
-    <img src="img/deal-list/03.jpg" class="header-bg-right-top" alt="">
-    <img src="img/deal-list/02.jpg" class="header-bg-right-bottom" alt="">
-    <img src="img/deal-list/01.png" class="header-bg-left" alt="">
+    <img src="<?php echo $app_folder; ?>img/deal-list/01.png" class="header-bg-main" alt="">
+    <img src="<?php echo $app_folder; ?>img/deal-list/03.jpg" class="header-bg-right-top" alt="">
+    <img src="<?php echo $app_folder; ?>img/deal-list/02.jpg" class="header-bg-right-bottom" alt="">
+    <img src="<?php echo $app_folder; ?>img/deal-list/01.png" class="header-bg-left" alt="">
   </div>
   <a href="/" class="header-logo">
-    <img src="img/deal-list/04.png" alt="">
+    <img src="<?php echo $app_folder; ?>img/deal-list/04.png" alt="">
   </a>
   <div class="content pb-5 deal-list-content">
     <div class="user-login-logout-wrapper">
@@ -102,7 +102,7 @@
  {{content.post_content}}
 </div>
 <div class="signature">
-  <img src="img/deal-list/sig.png" alt="klimsol-team">
+  <img src="<?php echo $app_folder; ?>img/deal-list/sig.png" alt="klimsol-team">
 </div>
 </div>
 
