@@ -1,5 +1,6 @@
 <?php
 $app_folder = '/memberlogin-new/';
+$app_folder = '/';
 $data = [
   'wordpress' => [
     'apiUrl' => 'https://klimsol.info/ajax/?'
